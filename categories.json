@@ -1,0 +1,80 @@
+{
+  "nsfw_category": "nsfw",
+  "nsfw_min": 0.4,
+  "other_below": 0.22,
+  "categories": {
+    "portraits": [
+      "a portrait photo of a person",
+      "a close-up of a woman's face",
+      "a portrait of a man",
+      "a person posing for a photo",
+      "a woman on a beach",
+      "a woman in a bikini",
+      "women in swimsuits",
+      "a woman standing in a landscape at sunset",
+      "a woman in lingerie"
+    ],
+    "animals": [
+      "a photo of an animal",
+      "a cat",
+      "a dog",
+      "a bird",
+      "a wild animal in nature"
+    ],
+    "creatures & monsters": [
+      "a monster",
+      "a strange fantasy creature",
+      "a demon with horns",
+      "a skeletal creature"
+    ],
+    "fantasy": [
+      "a magical fantasy scene",
+      "a fairy with butterfly wings",
+      "an angel with wings",
+      "a knight in armor in a fantasy world",
+      "a queen with a crown"
+    ],
+    "horror": [
+      "a horror scene",
+      "a creepy, scary image",
+      "blood and gore",
+      "a haunted, terrifying place"
+    ],
+    "landscapes": [
+      "an empty landscape",
+      "a forest",
+      "a mountain range",
+      "an empty beach and the ocean",
+      "nature scenery seen from far away"
+    ],
+    "cities & architecture": [
+      "a city street",
+      "buildings and architecture",
+      "a cityscape at night",
+      "the interior of a building"
+    ],
+    "surreal": [
+      "a surreal, dreamlike image",
+      "surrealist art with impossible things"
+    ],
+    "sci-fi & cyborgs": [
+      "a cyborg",
+      "a robot",
+      "science fiction",
+      "a futuristic spaceship or machine"
+    ],
+    "anime & illustration": [
+      "an anime drawing",
+      "a cartoon illustration",
+      "a comic book drawing",
+      "a flat digital illustration"
+    ],
+    "nsfw": [
+      "a nude woman with bare breasts and nipples",
+      "a completely naked body",
+      "explicit sexual content",
+      "a topless woman with exposed breasts",
+      "full frontal nudity"
+    ]
+  }
+}

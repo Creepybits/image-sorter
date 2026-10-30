@@ -23,9 +23,7 @@ import sys
 import time
 from pathlib import Path
 
-import torch
 from PIL import Image
-from transformers import CLIPModel, CLIPProcessor
 
 HERE = Path(__file__).resolve().parent
 EXTS = (".png", ".jpg", ".jpeg", ".webp")
@@ -91,10 +89,15 @@ def list_images(folder, sub):
 
 def features(out):
     """Newer transformers return an output object instead of the embedding tensor."""
+    import torch
     return out if torch.is_tensor(out) else out.pooler_output
 
 
-def classify(paths, categories, nsfw_name, nsfw_min, other_below, model_name):
+def classify(paths, categories, nsfw_name, nsfw_min, other_below, model_name, progress=None, cancelled=None):
+    """Returns [(path, category, score)]. progress(done, total) and cancelled() are optional hooks for a UI;
+    a cancelled run returns None. The heavy imports live here so other code can import this module without torch."""
+    import torch
+    from transformers import CLIPModel, CLIPProcessor
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Loading CLIP on {device} (the first run downloads about 1.7 GB)...")
     model = CLIPModel.from_pretrained(model_name, torch_dtype=torch.float16 if device == "cuda" else torch.float32).to(device).eval()
@@ -109,6 +112,8 @@ def classify(paths, categories, nsfw_name, nsfw_min, other_below, model_name):
 
     results, started = [], time.time()
     for i in range(0, len(paths), BATCH):
+        if cancelled and cancelled():
+            return None
         chunk, imgs = [], []
         for p in paths[i:i + BATCH]:
             try:
@@ -137,6 +142,8 @@ def classify(paths, categories, nsfw_name, nsfw_min, other_below, model_name):
             results.append((p, cat, round(pr[top], 3)))
         done = min(i + BATCH, len(paths))
         print(f"  {done}/{len(paths)}  ({done / max(time.time() - started, 0.01):.0f} images/s)", end="\r")
+        if progress:
+            progress(done, len(paths))
     print()
     return results
 

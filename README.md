@@ -10,7 +10,24 @@ How it works:
 3. Preview sheets (up to 48 thumbnails per category) are saved and opened so you can check the result.
 4. **Nothing moves until you answer `y`.** Every move is logged in `sort_log.csv` in the destination folder and can be undone.
 
-## Install
+## Quick start (no terminal needed)
+
+1. Install Python from <https://www.python.org/downloads/>. Tick **Add python.exe to PATH** in the installer.
+2. Download this repo (green **Code** button, then **Download ZIP**) and unzip it.
+3. Double-click **`Start.bat`**. The first time it installs what it needs, which can take several minutes. After that it opens the window straight away.
+
+In the window:
+
+1. Choose the folder with your images, and where the sorted folders should go.
+2. Press **Analyze**. Nothing moves yet. The first run also downloads the AI model (about 1.7 GB).
+3. Look at the preview sheets that open, then press **Move images** if they look right.
+4. Changed your mind? **Undo last sort** puts everything back.
+
+**Edit categories** opens `categories.json` so you can change the folders. Your last folder choices are remembered.
+
+On macOS and Linux, run `pip install -r requirements.txt`, then `python sort_images_gui.py`. On Linux you may also need `sudo apt install python3-tk`.
+
+## Install (command line)
 
 You need Python 3.9 or newer.
 
@@ -20,7 +37,7 @@ You need Python 3.9 or newer.
 setup.bat
 ```
 
-This creates a local `venv` and installs the requirements. For an NVIDIA GPU, install a CUDA build of torch first. The command is in `setup.bat`, and the selector is at <https://pytorch.org/get-started/locally/>.
+This creates a local `venv` and installs the requirements. If it finds an NVIDIA GPU it installs the CUDA build of torch. For other builds, see <https://pytorch.org/get-started/locally/>.
 
 **Anywhere else**
 
@@ -30,9 +47,9 @@ pip install -r requirements.txt
 
 The first run downloads the CLIP model (about 1.7 GB).
 
-## Use
+## Use (command line)
 
-Windows: double-click `Sort_images.bat` to get a folder picker, or run it from a terminal with options.
+Windows: `Sort_images.bat` runs the command-line version and takes the same options.
 Any OS:
 
 ```bash
@@ -61,6 +78,8 @@ Point `SORT_PYTHON` at the interpreter before running the `.bat`:
 set SORT_PYTHON=C:\path\to\ComfyUI_windows_portable\python_embeded\python.exe
 Sort_images.bat
 ```
+
+The window (`Start.bat`) needs a Python with tkinter, and ComfyUI's embedded Python doesn't have it. Use the command-line version with that one.
 
 Set it permanently with `setx SORT_PYTHON "..."`. It needs `transformers` installed (`python -m pip install transformers`).
 

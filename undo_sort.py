@@ -13,16 +13,11 @@ import shutil
 from datetime import datetime
 
 
-def main():
-    ap = argparse.ArgumentParser(description="Undo moves recorded in sort_log.csv.")
-    ap.add_argument("log")
-    ap.add_argument("--last-run", action="store_true", help="only undo the most recent sort")
-    ap.add_argument("--dry-run", action="store_true")
-    args = ap.parse_args()
-
-    with open(args.log, newline="", encoding="utf-8") as f:
+def undo(log, last_run=False, dry_run=False, say=print):
+    """Moves logged images back to where they came from; returns how many were restored."""
+    with open(log, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    if args.last_run and rows:
+    if last_run and rows:
         fmt = "%Y-%m-%d %H:%M:%S"
         end = datetime.strptime(rows[-1]["time"], fmt)
         rows = [r for r in rows if (end - datetime.strptime(r["time"], fmt)).total_seconds() < 60]
@@ -31,16 +26,26 @@ def main():
     for r in reversed(rows):
         src, dst = r["to"], r["from"]
         if not os.path.exists(src):
-            print(f"missing, skipped: {src}")
+            say(f"missing, skipped: {src}")
             continue
         if os.path.exists(dst):
-            print(f"original location is occupied, skipped: {dst}")
+            say(f"original location is occupied, skipped: {dst}")
             continue
-        print(f"{src} -> {dst}")
-        if not args.dry_run:
+        say(f"{src} -> {dst}")
+        if not dry_run:
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.move(src, dst)
         restored += 1
+    return restored
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Undo moves recorded in sort_log.csv.")
+    ap.add_argument("log")
+    ap.add_argument("--last-run", action="store_true", help="only undo the most recent sort")
+    ap.add_argument("--dry-run", action="store_true")
+    args = ap.parse_args()
+    restored = undo(args.log, args.last_run, args.dry_run)
     print(f"\n{restored} images {'would be ' if args.dry_run else ''}restored.")
 
 
